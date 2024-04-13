@@ -1,0 +1,95 @@
+{{ block title }}
+    Part 1 - Instructions
+{{ endblock }}
+
+{{ block content }}
+<p>In this part, </p>
+
+<p><b>[Your tasks]</b> You will have to solve 15 tasks. <b>Each task comprises one <i>test question</i> and two <i>estimation
+    questions</i></b>. In each task, the first estimation question asks you to estimate your confidence in the correctness of
+    your own answer to the test question. The second estimation question asks you to estimate the average correctness rate
+    of all participants. Additionally, in this part, after every 5 tasks, there is a fatigue measurement question.
+    <span style="color: red;">Note: </span>for each <i>test question</i>, you have <b><span style="color: red;"> at most 2 minutes</span></b>
+    to finish. Once the time is up, the test question will end <i>automatically</i>, and the answer will be submitted.</p>
+
+<p><b>[Your earnings]</b> In case you are eligible for the bonus, at the end of the experiment, <b> one of the 15 tasks will
+    be randomly selected</b> by computer and you will be paid according to your performance in this chosen task. This
+    means that every answer is potentially relevant for your payment, so that you should think about each task carefully.
+    Specifically,
+<ul>
+   <li>for the test question: you will receive <b>10 points</b> if you answer to the test question in the chosen task is <b>correct</b>.</li>
+    <li>for the <i>first</i> estimation question: you will receive <b>up to 10 points</b> for your estimation and the closer
+        your estimation is to the truth, the more points you can get. By <b>"closer to the truth"</b>, we mean:
+        <ul>
+            <li> the <i>lower</i> the confidence level you state when your answer to the test questions is <i>wrong</i>.<br>
+            <li> the <i>higher</i> the confidence level you state when your answer to the test questions is <i>correct</i>.
+        </ul></li>
+</ul>
+
+    <!-- for detailed formula -->
+    <html>
+    <head>
+    <style>
+    .triangle-button {
+      cursor: pointer;
+      display: inline-block;
+      width: 0;
+      height: 0;
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      border-left: 17.3px solid lightgrey;
+      margin-right: 5px;
+      vertical-align: middle;
+      transition: transform 0.3s ease;
+    }
+
+    #formula {
+      display: none;
+    }
+
+    .content-container {
+      display: flex;
+      align-items: center;
+    }
+    </style>
+    </head>
+    <body>
+
+    <div class="content-container">
+      <span onclick="showFormula()" class="triangle-button"></span>
+      <p><span style="color: darkgrey"> To view the detailed formula, please click on the triangle.</span> </p>
+    </div>
+
+    <div id="formula">
+        <p> The formula to calculate points for the first estimation question: </p>
+        <p>if the answer to the test question is correct, Points = Confidence Level × 10; </p>
+        <p>if the answer to the test question is wrong, Points = (1 - Confidence Level) × 10 </p>
+    </div>
+
+    <script>
+    function showFormula() {
+      var formula = document.getElementById("formula");
+      var triangle = document.querySelector('.triangle-button');
+      if (formula.style.display === "none") {
+        formula.style.display = "block";
+        // Rotate triangle to point downwards when the content is shown
+        triangle.style.transform = 'rotate(90deg)';
+      } else {
+        formula.style.display = "none";
+        // Reset triangle to original position when content is hidden
+        triangle.style.transform = 'rotate(0)';
+      }
+    }
+    </script>
+
+    </body>
+    </html>
+
+
+
+<br><br>
+    {{ next_button }}
+
+{{ endblock }}
+
+

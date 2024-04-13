@@ -1,0 +1,119 @@
+{{ block title }}
+    Task {{ player.round_number }}: Estimation
+{{ endblock }}
+
+{{ block content }}
+
+{{ for field in form }}
+    {{ if "Conf_Estimation" in field.name }}
+        <br><br>
+        <p><b>Section 2 </b></p>
+        <p> On a scale of 0 to 100, please move the slider to indicate: <i>(Please make sure to adjust the slider before submitting.)</i></p>
+        <br>
+        <label for="Slider_{{ field.name }}">How <b>confident</b> are you that your answer to the
+            previous <b>test question</b> in Task {{player.round_number}} is <b>correct</b>?</label>
+        <br>
+        <p> -- I'm <b><span id="value_{{ field.name }}" style="color: red;">?</span></b>% confident that my answer is correct.</p>
+
+    {{ elif "Conf_Group" in field.name }}
+        <br><br>
+            <label for="Slider_{{ field.name }}">What <b>percentage of participants</b> do you think
+            will get the correct answer to the previous test question in Task {{player.round_number}}?</label>
+            <br>
+            <p> -- I think <b><span id="value_{{ field.name }}" style="color: red;">?</span></b>% of participants will get the correct answer.</p>
+    {{ endif }}
+
+    <div class="slider-container">
+        <div class="slider-labels">
+            <label for="Slider_{{ field.name }}">0</label>
+            <input type="range" id="Slider_{{ field.name }}" name="{{ field.name }}" min="0" max="100" step="1"
+                   oninput="updateSliderValue(this, '{{ field.name }}')" value="0">
+            <label for="Slider_{{ field.name }}">100</label>
+        </div>
+    </div>
+
+    <style>
+    .slider-container {
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+
+    input[type="range"] {
+        flex-grow: 1;
+        margin: 0 10px;
+        width: 100%;
+    }
+
+    .slider-labels {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .slider-value {
+        position: absolute;
+        margin-top: 30px;
+        text-align: center;
+        min-width: 30px;
+        transform: translateX(-50%);
+    }
+    </style>
+
+{{ endfor }}
+
+<br><br>
+{{ next_button }}
+
+
+<script>
+
+function updateSliderValue(slider, fieldName) {
+    var valueSpan = document.getElementById('value_' + fieldName);
+        if (valueSpan) {
+            valueSpan.innerHTML = slider.value;
+        }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const nextButton = document.querySelector('button.otree-btn-next');
+    if (nextButton) {
+        nextButton.addEventListener('click', function(event) {
+            if (this.disabled) {
+                alert("Please interact with the slider before submission.");
+                event.preventDefault();
+            }
+        });
+
+        nextButton.disabled = true;
+    }
+
+    let slidersChanged = {};
+
+    document.querySelectorAll('input[type="range"]').forEach(function(slider) {
+        slidersChanged[slider.name] = false;
+        slider.oninput = function() {
+            slidersChanged[slider.name] = true;
+            updateSliderValue(this, this.name);
+            let allChanged = Object.values(slidersChanged).every(changed => changed);
+            nextButton.disabled = !allChanged;
+        };
+    });
+
+    const formElement = document.querySelector('form.otree-form');
+    if (formElement) {
+        formElement.addEventListener('submit', function(event) {
+            if (nextButton.disabled) {
+                alert("Please interact with all sliders before submitting.");
+                event.preventDefault();
+            }
+        });
+    }
+});
+</script>
+
+{{ endblock }}
+
+
+
+

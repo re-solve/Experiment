@@ -1,0 +1,26 @@
+{{ block title }}
+    Task {{ player.round_number }}: Test Question
+{{ endblock }}
+
+{{ block content }}
+
+
+<br><br>
+
+    <p><b>Section 1</b></p>
+    <img src= {{ static image_path }} style = "width:300px">
+
+    {{ for field in form }}
+        <div class="form-group">
+            {{field.label}}
+            <br>{{ field }}
+        </div>
+    {{ endfor }}
+
+<br><br><br>
+    {{ next_button }}
+
+{{ endblock }}
+
+
+

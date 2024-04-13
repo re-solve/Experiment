@@ -1,0 +1,57 @@
+{{ block title }}
+    Part 2 - Instructions
+{{ endblock }}
+
+{{ block content }}
+<p> In this part, </p>
+<p><b>[Your tasks]</b> You will have to make 11 decisions in the specific senario shown below:</p>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decision Box</title>
+    <style>
+        .grey-border-box {
+            border: 1px solid grey;
+            padding: 20px;
+            margin: 20px;
+        }
+        .blue-text {
+            color: blue;
+        }
+        .red-text {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+<div class="grey-border-box">
+    <p>Imagine there is an <b>opaque</b> box containing <span class="blue-text">5 blue balls</span> and <span class="red-text">5 red balls</span>.</p>
+    <p>At each decision point, you are required to choose between two options:</p>
+    <ul>
+        <li>Option A: Draw a ball from the box. If the drawn ball is <span class="blue-text">blue</span>, you receive <i>10</i> points</li>
+        <li>Option B: Directly receive <i>X</i> points without drawing a ball</li>
+    </ul>
+    <p>where the value of <i>X</i> differs at each decision point. </p>
+</div>
+
+</body>
+</html>
+
+</ul>
+    <p>There is no right or wrong choice, please make decisions based on your preferences. </p>
+
+<p><b>[Your earnings]</b> In case you are eligible for the bonus, at the end of the experiment, <b>one of the 11 decision points
+    will be randomly selected</b> by computer. If you select option A in the chosen decision point, then the computer will randomly
+    draw a ball from the box; if it is a blue ball, you will get 10 points, if not, you will get 0 points. If you select option
+    B in the chosen decision point, then you will directly get the corresponding <i>X</i> points.</p>
+
+<br><br>
+    {{ next_button }}
+
+{{ endblock }}
+
+

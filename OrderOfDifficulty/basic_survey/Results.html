@@ -1,0 +1,30 @@
+{{ block title }}
+    Results
+{{ endblock }}
+
+
+{{ block content }}
+
+<p> You reached the end of the study.</p>
+<hr>
+{% if luck == 1 %}
+    <p> Congratulations! You are selected to receive the additional bonus.</p>
+    <p> Based on the choices you made, as well as chance, your payment is shown below:</p>
+    <ul>
+        <li><p> Part 1: Your decision in <i>Task {{ chosen_round }}</i> is chosen, your earned {{ app1_payoff }} points.</p></li>
+        <li><p> Part 2: Your decision in <i>Row {{ random_choice }}</i> is chosen, your earned {{ app2_payoff }} points.</p></li>
+    </ul>
+    <p> Your total points in Part 1 and Part 2 are: {{ total_payoff }} points.</p></p>
+{% else %}
+    <p> Sorry, you have not been selected to receive the additional bonus. Selection for the bonus is made randomly,
+        and all participants had an equal chance.</p>
+{% endif %}
+<p><b>Your final payment, including the participation fee, is: {{ player.payoff }}</b>.</p>
+</p>
+<p> Your payment will be updated on Prolific once all participants finish the study. Thank you for participating in this study!</p>
+<br><br>
+<p>Reference: All the test questions are sourced from <a href="https://www.mensa.org/public/mensa-iq-challenge">Mensa IQ Challenge</a>. </p>
+
+{{ endblock }}
+
+

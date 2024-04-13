@@ -1,0 +1,44 @@
+{{ block title }}<center><p>Welcome</p></center>{{ endblock }}
+{{ block content }}
+
+    <center>
+        {{ formfields }}
+    </center>
+
+
+
+<center>
+    <button type="button" class="btn btn-primary" onclick="checkSubmit()">Next</button>
+</center>
+
+<!--The code below prevents participants from submitting their Prolific ID va the Enter button.-->
+<script type="text/javascript">
+window.addEventListener('keydown',function(e){if(e.keyIdentifier=='U+000A'||e.keyIdentifier=='Enter'||e.keyCode==13){if(e.target.nodeName=='INPUT'&&e.target.type=='text'){e.preventDefault();return false;}}},true);
+</script>
+
+<script>
+    function checkSubmit() {
+        let form = document.getElementById('form');
+        let isValid = form.reportValidity();
+        if (!isValid) return;
+
+        let warnings = [];
+
+        let prolific_id = forminputs.prolific_id.value;
+
+        // Warn of Prolific ID is too short
+        if (prolific_id.length < 10) {
+            warnings.push("Are you sure about your id?")
+        }
+        
+        // Press OK to proceed anyway
+        if (warnings.length > 0) {
+            warnings.push("Press OK to proceed anyway.")
+            let confirmed = window.confirm(warnings.join('\r\n'));
+            if (!confirmed) return;
+        }
+        form.submit();
+    }
+</script>
+
+{{ endblock }}

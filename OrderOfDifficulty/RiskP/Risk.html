@@ -1,0 +1,107 @@
+{{ block title }}
+    Scenario 1
+{{ endblock }}
+{{ block content }}
+
+<p>Imagine there is an <b>opaque</b> box containing <span style="color: blue;">5 blue balls</span> and <span style="color: red;">5 red balls</span>.</p>
+<p>Below is a set of options, where <b>each row represents a decision point</b>. Each pair within the same row should be compared. Please <b>select one option from each row</b> based on your personal preference.</p>
+<br>
+<p>Please note: If you change your selection from Option A to Option B, subsequent decisions will default to Option B for
+    your convenience. This is because the points obtained from Option B increase with each subsequent row, while the Option A stays
+    constant across all decision points. However, this design does not limit your freedom to choose. You are still free
+    to make your choice at each decision point row by row.</p>
+
+<input type="hidden" name="switching_point_risk" id="id_switching_point_risk">
+{{ formfield_errors 'switching_point_risk' }}
+
+<table class="table table-striped">
+    <colgroup>
+        <col width="45%">
+        <col width="10%">
+        <col width="45%">
+    </colgroup>
+    <tr>
+        <td align="right"><b>Option A</b></td>
+        <td></td>
+        <td align="left"><b>Option B</b></td>
+    </tr>
+    {{ for amount in right_side_amounts }}
+    <tr>
+        <td align="right" style="font-size: 100%;">
+            Draw a ball from the box.
+            <br>If the drawn ball is  <span style="color: blue;">blue</span>, you receive <b>{{ player.left_side_amount }} points</b>
+        <td align="middle">
+            <input type="radio"
+                   value="left"
+                   name="{{ amount }}"
+                   required>&nbsp;&nbsp;
+            <input type="radio"
+                   name="{{ amount }}"
+                   value="right" data-amount="{{ amount }}"
+                   required>
+        </td>
+        <td align="left" style="font-size: 100%;">
+            Directly receive <b>{{ amount }} points </b> without drawing a ball
+    </tr>
+    {{ endfor }}
+</table>
+
+
+<button type="button" class="btn btn-primary" onclick="submitForm()">Next</button>
+
+
+{{ endblock }}
+
+
+{{ block scripts }}
+<script>
+    let allRadios = document.querySelectorAll('input[type=radio]')
+    function submitForm() {
+        let form = document.getElementById('form');
+        if (form.reportValidity()) {
+            let switchingPoint = document.getElementById('id_switching_point_risk');
+
+            let allChoicesAreOnLeft = true;
+            for (let radio of allRadios) {
+                if (radio.value === 'right' && radio.checked) {
+                    switchingPoint.value = radio.dataset.amount;
+                    allChoicesAreOnLeft = false;
+                    break;
+                }
+            }
+            if (allChoicesAreOnLeft) {
+                // '9999' represents the valueInput if the user didn't click the right side for any choice
+                // it means their switching point is off the scale.
+                switchingPoint.value = '9999';
+            }
+            form.submit();
+        }
+    }
+
+    function onRadioClick(evt) {
+        let clickedRadio = evt.target;
+        let afterClickedRadio = false;
+        let clickedRightRadio = clickedRadio.value === 'right';
+
+        for (let aRadio of allRadios) {
+            if (aRadio === clickedRadio) {
+                afterClickedRadio = true;
+                continue;
+            }
+            if (clickedRightRadio && afterClickedRadio && aRadio.value === 'right') {
+                aRadio.checked = true;
+            }
+            if (!clickedRightRadio && !afterClickedRadio && aRadio.value === 'left') {
+                aRadio.checked = true;
+            }
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function (event) {
+        for (let radio of document.querySelectorAll('input[type=radio]')) {
+            radio.onchange = onRadioClick;
+        }
+    });
+
+</script>
+{{ endblock }}

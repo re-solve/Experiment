@@ -1,0 +1,119 @@
+{{ block title }}
+    Question
+{{ endblock }}
+
+{{ block content }}
+<br>
+
+{{ for field in form }}
+    <style>
+    .slider-container {
+        position: relative;
+        width: 100%;
+        max-width: 700px;
+        margin-bottom: 1em; /* Add some space at the bottom of each slider */
+    }
+    .slider {
+        width: 100%; /* Full width */
+        margin: auto; /* Center the slider */
+    }
+    label {
+        display: block;
+        margin-bottom: 0.5em;
+
+    }
+    .slider-labels {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.8em;
+    }
+    .end-labels {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 0.5em;
+    }
+    {
+        text-align: center;
+        margin-top: 1em; /* Spacing from the slider */
+    }
+    </style>
+
+    <div class="slider-container">
+        <label for="Slider_{{ field.name }}"><b>On a scale of 1 to 10, please move the slider to indicate how tired you feel now.</b>
+        <p><i>(Please make sure to adjust the slider before submitting.)</i></p></label>
+        <p> -- My level of tiredness is <b><span id="value_{{ field.name }}" style="color: red;">?</span></b>/10.</p>
+        <div class="end-labels">
+            <span>1</span>
+            <span>10</span>
+        </div>
+        <div class="slider-labels">
+            <span>Not tired at all</span>
+            <span>Extremely tired</span>
+        </div>
+        <input class="slider" type="range" id="Slider_{{ field.name }}" name="{{ field.name }}" min="1" max="10" step="1">
+        <output class="slider-value" for="Slider_{{ field.name }}" id="value_{{ field.name }}"></output>
+
+    </div>
+
+    <script>
+        const slider = document.getElementById('Slider_{{ field.name }}');
+        const output = document.getElementById('value_{{ field.name }}');
+
+        slider.oninput = function() {
+            output.style.left = (this.value - this.min) / (this.max - this.min) * 100 + '%';
+            output.textContent = this.value;
+        };
+
+        // Clear the slider value on initialization
+        slider.value = slider.min;
+        output.textContent = '';
+        output.style.left = '0%';
+    </script>
+
+{{ endfor }}
+
+
+<br><br>
+    {{ next_button }}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const nextButton = document.querySelector('button.otree-btn-next');
+    if (nextButton) nextButton.disabled = true;
+
+    let slidersChanged = {};
+    document.querySelectorAll('.slider').forEach(function(slider) {
+        slidersChanged[slider.name] = false; // Initialize all sliders as not changed
+
+        slider.oninput = function() {
+            slidersChanged[slider.name] = true; // Mark this slider as changed
+
+            // Update display of slider value if needed
+            const output = document.getElementById('value_' + slider.name);
+            if (output) {
+                output.textContent = this.value;
+                output.style.left = (this.value - this.min) / (this.max - this.min) * 100 + '%';
+            }
+
+            // Check if all sliders have been changed
+            let allChanged = Object.values(slidersChanged).every(changed => changed);
+            nextButton.disabled = !allChanged; // Enable next button if all sliders have been changed
+        };
+    });
+
+    const formElement = document.querySelector('form');
+    if (formElement) {
+        formElement.addEventListener('submit', function(event) {
+            if (nextButton.disabled) {
+                event.preventDefault(); // Prevent form submission
+                alert("Please interact with all sliders before submitting.");
+            }
+        });
+    }
+});
+</script>
+
+{{ endblock }}
+
+
+
